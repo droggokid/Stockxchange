@@ -6,8 +6,8 @@ namespace StockManagementSystemClasses.Interfaces
     {
         event EventHandler<DisplayEventArgs> DisplayEvent;
 
-        void OnSuperviseStock(object sender, SuperviseStockEventArgs e);
-        void OnAddShare(object sender, AddShareEventArgs e);
+        void OnSuperviseStock(object? sender, SuperviseStockEventArgs e);
+        void OnAddShare(object? sender, AddShareEventArgs e);
         void OnStockRecommended(object sender, StockRecommendedEventArgs e);
         void TriggerDisplayEvent(string msg);
         void AddShareToList(string name, IShare share);

@@ -6,29 +6,40 @@ namespace StockManagementSystemClasses.Models
     public class Share : IShare
     {
         public string Name {get;}
-        public event EventHandler<StockRecommendedEventArgs> StockRecommendedEvent;
-        private ITradeAdvisor tradeAdvisor;
-        private float[] value;
+        public event EventHandler<StockRecommendedEventArgs>? StockRecommendedEvent;
+        private ITradeAdvisor _tradeAdvisor { get; }
+        private List<(DateTime, float)> values = new List<(DateTime, float)>();
 
         public Share(string name, ITradeAdvisor tradeAdvisor)
         {
             Name = name;
-            this.tradeAdvisor = tradeAdvisor;
+            _tradeAdvisor = tradeAdvisor;
+            values = new List<(DateTime, float)>(); 
         }
 
-        public void OnStockUpdate(object sender, StockUpdateEventArgs e)
+        public void OnStockUpdate(object? sender, StockUpdateEventArgs e)
         {
-            
+            AppendValue(e.Time, e.Value);
+            string recommendation = _tradeAdvisor.Update(this);
+            TriggerRecommendedEvent(this, recommendation);
         }
         
-        public (DateTime, float[]) GetValues(int numValues)
+        public (DateTime, float) GetValues(int numValues)
         {
-            return (new DateTime(), new float[0]);
+            if(numValues < 1)
+            {
+                return values[0];
+            }
+            if(numValues > values.Count)
+            {
+                return values[values.Count - 1];
+            }
+            return values[values.Count - numValues];
         }
 
         public void StartSupervision(ITradeAdvisor tradeAdvisor, string strategy, float[] parameters)
         {
-
+            tradeAdvisor.setAdvisorStrategy(strategy, parameters);
         }
 
         public void TriggerRecommendedEvent(IShare share, string recommendation)
@@ -38,8 +49,7 @@ namespace StockManagementSystemClasses.Models
 
         private void AppendValue(DateTime time, float value)
         {
-
+            values.Add((time, value));
         }
-
     }
 }

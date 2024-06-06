@@ -6,8 +6,8 @@ namespace StockManagementSystemClasses.Models
     
     public class UI : IUI
     {
-        public event EventHandler<AddShareEventArgs> AddShareEvent;
-        public event EventHandler<SuperviseStockEventArgs> SuperviseStockEvent;
+        public event EventHandler<AddShareEventArgs>? AddShareEvent;
+        public event EventHandler<SuperviseStockEventArgs>? SuperviseStockEvent;
         
         public void OnDisplay(object sender, string msg)
         {
