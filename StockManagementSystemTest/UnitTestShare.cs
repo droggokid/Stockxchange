@@ -93,41 +93,45 @@ public class ShareTests
     [Test]
     public void GetValues_ShouldReturnCorrectValues1()
     {
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 });
+        var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
         var result = uut.GetValues(1);
-        Assert.That(result.Item1, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMilliseconds(10)));
+        Assert.That(result.Item1, Is.EqualTo(fixedTime));
         Assert.That(result.Item2, Is.EqualTo((float)10));
     }
 
     [Test]
     public void GetValues_ShouldReturnCorrectValues2()
     {
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 });
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 20 });
+        var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
         var result = uut.GetValues(2);
-        Assert.That(result.Item1, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMilliseconds(10)));
+        Assert.That(result.Item1, Is.EqualTo(fixedTime));
         Assert.That(result.Item2, Is.EqualTo((float)10));
     }
 
     [Test]
     public void GetValues_ShouldReturnCorrectValues3()
     {
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 });
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 20 });
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 30 });
+        var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 30 });
         var result = uut.GetValues(-1);
-        Assert.That(result.Item1, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMilliseconds(10)));
+        Assert.That(result.Item1, Is.EqualTo(fixedTime));
         Assert.That(result.Item2, Is.EqualTo((float)10));
     }
 
     [Test]
     public void GetValues_ShouldReturnCorrectValues4()
     {
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 });
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 20 });
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = DateTime.Now, Value = 30 });
+        var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 30 });
         var result = uut.GetValues(40);
-        Assert.That(result.Item1, Is.EqualTo(DateTime.Now).Within(TimeSpan.FromMilliseconds(10)));
+        Assert.That(result.Item1, Is.EqualTo(fixedTime));
         Assert.That(result.Item2, Is.EqualTo((float)30));
     }
 }
