@@ -1,4 +1,3 @@
-using StockManagementSystemClasses.Controller;
 using StockManagementSystemClasses.Interfaces;
 using StockManagementSystemClasses.Events;
 using StockManagementSystemClasses.Models;
@@ -11,16 +10,13 @@ public class TradeAdvisorTests
 {
     private ITradeAdvisor uut;
     private IShare share;
-    private IStockManager stockManager;
-    private IStockProvider stockProvider;
+
 
     [SetUp]
     public void Setup()
     {
-        stockProvider = Substitute.For<IStockProvider>();
         uut = new TradeAdvisor();
         share = new Share("TestShare", uut);
-        stockManager = new StockManager(stockProvider, uut);
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         share.OnStockUpdate(this, args);
     }

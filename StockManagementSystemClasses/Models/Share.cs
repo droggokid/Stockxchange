@@ -3,7 +3,7 @@ using StockManagementSystemClasses.Events;
 
 namespace StockManagementSystemClasses.Models
 {
-    public class Share : IShare
+    public class Share
     {
         public string Name {get;}
         public event EventHandler<StockRecommendedEventArgs>? StockRecommendedEvent;
@@ -37,12 +37,12 @@ namespace StockManagementSystemClasses.Models
             return values.GetRange(values.Count - numValues, numValues);
         }
 
-        public void StartSupervision(ITradeAdvisor tradeAdvisor, string strategy, float[] parameters)
+        public void StartSupervision(ITradeAdvisor tradeAdvisor)
         {
-            tradeAdvisor.setAdvisorStrategy(strategy, parameters);
+            
         }
 
-        public void TriggerRecommendedEvent(IShare share, string recommendation)
+        public void TriggerRecommendedEvent(Share share, string recommendation)
         {
             StockRecommendedEvent?.Invoke(this, new StockRecommendedEventArgs { Share = share, Recommendation = recommendation});
         }

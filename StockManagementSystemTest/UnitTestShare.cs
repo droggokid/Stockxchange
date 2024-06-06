@@ -1,4 +1,3 @@
-using StockManagementSystemClasses.Controller;
 using StockManagementSystemClasses.Interfaces;
 using StockManagementSystemClasses.Events;
 using StockManagementSystemClasses.Models;
@@ -10,16 +9,12 @@ namespace StockManagementSystemTest;
 public class ShareTests
 {
     private IShare uut;
-    private IStockManager stockManager;
     private ITradeAdvisor tradeAdvisor;
-    private IStockProvider stockProvider;
 
     [SetUp]
     public void Setup()
     {
-        stockProvider = Substitute.For<IStockProvider>();
         tradeAdvisor = Substitute.For<ITradeAdvisor>();
-        stockManager = new StockManager(stockProvider, tradeAdvisor);
         uut = new Share("TestShare", tradeAdvisor);
     }
 

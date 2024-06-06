@@ -1,11 +1,11 @@
 namespace StockManagementSystemClasses.Events
 {
     using System;
-    using StockManagementSystemClasses.Interfaces;
+    using StockManagementSystemClasses.Models;
 
     public class StockRecommendedEventArgs : EventArgs
     {
-        public IShare? Share { get; set; }
+        public Share? Share { get; set; }
         public string? Recommendation { get; set; }
     }
 
@@ -31,12 +31,5 @@ namespace StockManagementSystemClasses.Events
     public class DisplayEventArgs : EventArgs
     {
         public string? Message { get; set; }
-    }
-
-    public enum RecommendationStrategy
-    {
-        NoAdvisor,
-        LimitAdvisor,
-        RegressionAdvisor
     }
 }
