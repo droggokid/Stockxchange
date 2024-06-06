@@ -9,8 +9,10 @@ namespace StockManagementSystemClasses.Models
         private float _thBuy;
         private float _thSell;
 
-        public LimitAdvisor()
+        public LimitAdvisor(float thBuy, float thSell)
         {
+            _thBuy = thBuy;
+            _thSell = thSell;
         }
 
         public string Update(Share share)

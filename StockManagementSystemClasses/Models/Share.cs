@@ -7,7 +7,7 @@ namespace StockManagementSystemClasses.Models
     {
         public string Name {get;}
         public event EventHandler<StockRecommendedEventArgs>? StockRecommendedEvent;
-        private ITradeAdvisor _tradeAdvisor { get; }
+        private ITradeAdvisor _tradeAdvisor { get; set;}
         private List<(DateTime, float)> values = new List<(DateTime, float)>();
 
         public Share(string name, ITradeAdvisor tradeAdvisor)
@@ -39,7 +39,7 @@ namespace StockManagementSystemClasses.Models
 
         public void StartSupervision(ITradeAdvisor tradeAdvisor)
         {
-            
+            _tradeAdvisor = tradeAdvisor;
         }
 
         public void TriggerRecommendedEvent(Share share, string recommendation)
