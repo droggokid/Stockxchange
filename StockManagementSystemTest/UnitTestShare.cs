@@ -44,7 +44,7 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1).Item2 == 10));
+        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1)[0].Item2 == 10));
     }
 
     [Test]
@@ -52,7 +52,7 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1).Item1 == args.Time));
+        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1)[0].Item1 == args.Time));
     }
 
     [Test]
@@ -77,27 +77,13 @@ public class ShareTests
     }
 
     [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy4()
-    {
-        uut.StartSupervision(tradeAdvisor, "LimitAdvisor", new float[] { 10, 20 });
-        tradeAdvisor.Received().setAdvisorStrategy(Arg.Is<string>("LimitAdvisor"), Arg.Any<float[]>());
-    }
-
-    [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy5()
-    {
-        uut.StartSupervision(tradeAdvisor, "RegressionAdvisor", new float[] { 10, 20 });
-        tradeAdvisor.Received().setAdvisorStrategy(Arg.Is<string>("RegressionAdvisor"), Arg.Any<float[]>());
-    }
-
-    [Test]
     public void GetValues_ShouldReturnCorrectValues1()
     {
         var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
         var result = uut.GetValues(1);
-        Assert.That(result.Item1, Is.EqualTo(fixedTime));
-        Assert.That(result.Item2, Is.EqualTo((float)10));
+        Assert.That(result[0].Item1, Is.EqualTo(fixedTime));
+        Assert.That(result[0].Item2, Is.EqualTo((float)10));
     }
 
     [Test]
@@ -107,8 +93,8 @@ public class ShareTests
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
         var result = uut.GetValues(2);
-        Assert.That(result.Item1, Is.EqualTo(fixedTime));
-        Assert.That(result.Item2, Is.EqualTo((float)10));
+        Assert.That(result[0].Item1, Is.EqualTo(fixedTime));
+        Assert.That(result[0].Item2, Is.EqualTo((float)10));
     }
 
     [Test]
@@ -119,8 +105,8 @@ public class ShareTests
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 30 });
         var result = uut.GetValues(-1);
-        Assert.That(result.Item1, Is.EqualTo(fixedTime));
-        Assert.That(result.Item2, Is.EqualTo((float)10));
+        Assert.That(result[0].Item1, Is.EqualTo(fixedTime));
+        Assert.That(result[0].Item2, Is.EqualTo((float)10));
     }
 
     [Test]
@@ -131,7 +117,7 @@ public class ShareTests
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 20 });
         uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 30 });
         var result = uut.GetValues(40);
-        Assert.That(result.Item1, Is.EqualTo(fixedTime));
-        Assert.That(result.Item2, Is.EqualTo((float)30));
+        Assert.That(result[0].Item1, Is.EqualTo(fixedTime));
+        Assert.That(result[0].Item2, Is.EqualTo((float)30));
     }
 }

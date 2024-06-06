@@ -49,7 +49,7 @@ namespace StockManagementSystemClasses.Models
 
         public string Update(IShare share)
         {
-            float currentValue = share.GetValues(1).Item2;
+            float currentValue = share.GetValues(1)[0].Item2;
 
             switch (_strategy)
             {
@@ -70,26 +70,29 @@ namespace StockManagementSystemClasses.Models
                     }
                 case RecommendationStrategy.RegressionAdvisor:
                     _valueHistory.Enqueue(currentValue);
-                    // nødvendig hvis queue ikke var tom til at starte med o_O
                     if (_valueHistory.Count > _samples)
+                    // nødvendig hvis queue ikke var tom til at starte med o_O
                         _valueHistory.Dequeue();
-                    
+
                     if (_valueHistory.Count == _samples)
                     {
-                        // (slutværdi-startværdi)/startværdi*100%=procentdel
-                        float initial = _valueHistory.Peek();
-                        float change = (currentValue - initial) / initial * 100;
-                        if (currentValue > change/_samples && change/_samples > 0)
+                        if (_valueHistory.Count > 0) 
                         {
-                            return "Buy";
-                        }
-                        else if (currentValue < change/_samples && change/_samples < 0)
-                        {
-                            return "Sell";
-                        }
-                        else
-                        {
-                            return "Keep";
+                            float initial = _valueHistory.Peek();
+                            float change = (currentValue - initial) / initial * 100;
+
+                            if (change > _percentageChange)
+                            {
+                                return "Buy";
+                            }
+                            else if (change < -_percentageChange)
+                            {
+                                return "Sell";
+                            }
+                            else
+                            {
+                                return "Keep";
+                            }
                         }
                     }
                     return "Keep";
@@ -99,3 +102,5 @@ namespace StockManagementSystemClasses.Models
         }
     }
 }
+
+

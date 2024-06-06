@@ -24,17 +24,17 @@ namespace StockManagementSystemClasses.Models
             TriggerRecommendedEvent(this, recommendation);
         }
         
-        public (DateTime, float) GetValues(int numValues)
+        public List<(DateTime, float)> GetValues(int numValues)
         {
-            if(numValues < 1)
+            if(numValues <= 0)
             {
-                return values[0];
+                return new List<(DateTime, float)> { values[0] };
             }
             if(numValues > values.Count)
             {
-                return values[values.Count - 1];
+                return new List<(DateTime, float)> { values[values.Count - 1] };
             }
-            return values[values.Count - numValues];
+            return values.GetRange(values.Count - numValues, numValues);
         }
 
         public void StartSupervision(ITradeAdvisor tradeAdvisor, string strategy, float[] parameters)
