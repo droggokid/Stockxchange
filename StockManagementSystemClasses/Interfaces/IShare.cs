@@ -4,8 +4,10 @@ namespace StockManagementSystemClasses.Interfaces
 {
     public interface IShare
     {
-        DateTime GetValues(int numValues);
+        event EventHandler<StockRecommendedEventArgs> StockRecommendedEvent;
+        (DateTime, float[]) GetValues(int numValues);
         void OnStockUpdate(object sender, StockUpdateEventArgs e);
         void StartSupervision(ITradeAdvisor tradeAdvisor, string strategy, float[] parameters);
+        void TriggerRecommendedEvent(IShare share, string recommendation);
     }
 }
