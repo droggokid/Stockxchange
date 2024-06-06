@@ -7,6 +7,7 @@ build-and-test:
     GIT_STRATEGY: clone
   script:
     # Build and run tests
+    - 'cd StockManagementSystemTest'
     - 'dotnet clean'
     - 'dotnet build'
     # dotnet test will dump coverage.cobertura.xml in MyThing.Tests/TestResults/<number>/coverage.cobertura.xml

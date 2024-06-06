@@ -1,17 +1,12 @@
 using StockManagementSystemClasses.Interfaces;
+using StockManagementSystemClasses.Events;
 
 namespace StockManagementSystemClasses.Models
 {
-    public enum RecommendationStrategy
-    {
-        NoAdvisor,
-        LimitAdvisor,
-        RegressionAdvisor
-    }
 
     public class TradeAdvisor : ITradeAdvisor
     {
-        private RecommendationStrategy _strategy;
+        public RecommendationStrategy _strategy { get; set;}
         private float _thBuy;
         private float _thSell;
         private float _percentageChange;

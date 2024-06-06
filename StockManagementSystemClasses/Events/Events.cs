@@ -32,4 +32,11 @@ namespace StockManagementSystemClasses.Events
     {
         public string? Message { get; set; }
     }
+
+    public enum RecommendationStrategy
+    {
+        NoAdvisor,
+        LimitAdvisor,
+        RegressionAdvisor
+    }
 }
