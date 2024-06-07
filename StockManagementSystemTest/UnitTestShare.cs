@@ -55,26 +55,6 @@ public class ShareTests
         LimitAdvisor.Received().Update(Arg.Is<Share>(x => x.GetValues(1)[0].Item1 == args.Time));
     }
 
-    /*[Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy1()
-    {
-        uut.StartSupervision(RegressionAdvisor);
-        FieldInfo tradeAdvisorField = typeof(Share).GetField("_tradeAdvisor", BindingFlags.NonPublic | BindingFlags.Instance);
-        var tradeAdvisorValue = tradeAdvisorField.GetValue(uut);
-
-        Assert.That(tradeAdvisorValue, Is.EqualTo(RegressionAdvisor));
-    }
-
-    [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy2()
-    {
-        uut.StartSupervision(LimitAdvisor);
-        FieldInfo tradeAdvisorField = typeof(Share).GetField("_tradeAdvisor", BindingFlags.NonPublic | BindingFlags.Instance);
-        var tradeAdvisorValue = tradeAdvisorField.GetValue(uut);
-
-        Assert.That(tradeAdvisorValue, Is.EqualTo(LimitAdvisor));
-    }*/
-
     [Test]
     public void GetValues_ShouldReturnCorrectValues1()
     {
