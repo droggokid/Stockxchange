@@ -1,26 +1,26 @@
-using StockManagementSystemClasses.Controller;
 using StockManagementSystemClasses.Interfaces;
 using StockManagementSystemClasses.Events;
 using StockManagementSystemClasses.Models;
 using NUnit.Framework;
 using NSubstitute;
+using System.Reflection;
 
 namespace StockManagementSystemTest;
 
 public class ShareTests
 {
-    private IShare uut;
-    private IStockManager stockManager;
-    private ITradeAdvisor tradeAdvisor;
-    private IStockProvider stockProvider;
+    private Share uut;
+    private Share uut1;
+    private ITradeAdvisor LimitAdvisor;
+    private ITradeAdvisor RegressionAdvisor;
 
     [SetUp]
     public void Setup()
     {
-        stockProvider = Substitute.For<IStockProvider>();
-        tradeAdvisor = Substitute.For<ITradeAdvisor>();
-        stockManager = new StockManager(stockProvider, tradeAdvisor);
-        uut = new Share("TestShare", tradeAdvisor);
+        LimitAdvisor = Substitute.For<ITradeAdvisor>();
+        RegressionAdvisor = Substitute.For<ITradeAdvisor>();
+        uut = new Share("TestShare", LimitAdvisor);
+        uut1 = new Share("TestShare1", RegressionAdvisor);
     }
 
     [Test]
@@ -28,7 +28,7 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(uut);
+        LimitAdvisor.Received().Update(uut);
     }
 
     [Test]
@@ -36,7 +36,7 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.Name == "TestShare"));
+        LimitAdvisor.Received().Update(Arg.Is<Share>(x => x.Name == "TestShare"));
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1)[0].Item2 == 10));
+        LimitAdvisor.Received().Update(Arg.Is<Share>(x => x.GetValues(1)[0].Item2 == 10));
     }
 
     [Test]
@@ -52,35 +52,14 @@ public class ShareTests
     {
         StockUpdateEventArgs args = new StockUpdateEventArgs { Time = DateTime.Now, Value = 10 };
         uut.OnStockUpdate(this, args);
-        tradeAdvisor.Received().Update(Arg.Is<IShare>(x => x.GetValues(1)[0].Item1 == args.Time));
-    }
-
-    [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy1()
-    {
-        uut.StartSupervision(tradeAdvisor, "NoAdvisor", new float[] { 10, 20 });
-        tradeAdvisor.Received().setAdvisorStrategy("NoAdvisor", Arg.Is<float[]>(x => x.SequenceEqual(new float[] { 10, 20 })));
-    }
-
-    [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy2()
-    {
-        uut.StartSupervision(tradeAdvisor, "NoAdvisor", new float[] { 10, 20 });
-        tradeAdvisor.Received().setAdvisorStrategy("NoAdvisor", Arg.Is<float[]>(x => x.Length == 2));
-    }
-
-    [Test]
-    public void StartSupervision_ShouldCallTradeAdvisorSetAdvisorStrategy3()
-    {
-        uut.StartSupervision(tradeAdvisor, "NoAdvisor", new float[] { 10, 20 });
-        tradeAdvisor.Received().setAdvisorStrategy(Arg.Is<string>("NoAdvisor"), Arg.Any<float[]>());
+        LimitAdvisor.Received().Update(Arg.Is<Share>(x => x.GetValues(1)[0].Item1 == args.Time));
     }
 
     [Test]
     public void GetValues_ShouldReturnCorrectValues1()
     {
         var fixedTime = new DateTime(2024, 6, 6, 19, 4, 26);
-        uut.OnStockUpdate(this, new StockUpdateEventArgs { Time = fixedTime, Value = 10 });
+        uut.OnStockUpdate(this, new StockUpdateEventArgs { ShareName = "asd", Time = fixedTime, Value = 10 });
         var result = uut.GetValues(1);
         Assert.That(result[0].Item1, Is.EqualTo(fixedTime));
         Assert.That(result[0].Item2, Is.EqualTo((float)10));
